@@ -1,0 +1,28 @@
+GET http://localhost:8000/language/list
+Content-Type: application/json
+
+
+
+###
+
+POST http://localhost:8000/language/create
+Content-Type: application/json
+
+{
+  "title": "ingliz",
+  "code": "eng"
+}
+
+###
+
+PATCH http://localhost:8000/language/update/1
+Content-Type: application/json
+
+{
+  "code": "uz"
+}
+
+###
+DELETE http://localhost:8000/language/delete/4
+Content-Type: application/json
+
