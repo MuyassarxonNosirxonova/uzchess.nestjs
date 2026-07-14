@@ -1,0 +1,88 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { Expose, Type } from 'class-transformer';
+
+class RefDto {
+  @ApiProperty()
+  @Expose()
+  id: number;
+
+  @ApiProperty()
+  @Expose()
+  title: string;
+}
+
+class AuthorRefDto {
+  @ApiProperty()
+  @Expose()
+  id: number;
+
+  @ApiProperty()
+  @Expose()
+  fullName: string;
+}
+
+export class GetOneCourseResponse {
+  @ApiProperty()
+  @Expose()
+  id: number;
+
+  @ApiProperty()
+  @Expose()
+  title: string;
+
+  @ApiProperty()
+  @Expose()
+  image: string;
+
+  @ApiProperty()
+  @Expose()
+  price: number;
+
+  @ApiProperty({ required: false })
+  @Expose()
+  newPrice?: number;
+
+  @ApiProperty()
+  @Expose()
+  isPublished: boolean;
+
+  @ApiProperty({ required: false })
+  @Expose()
+  rating?: number;
+
+  @ApiProperty()
+  @Expose()
+  reviewsCount: number;
+
+  @ApiProperty()
+  @Expose()
+  sectionsCount: number;
+
+  @ApiProperty()
+  @Expose()
+  lessonsCount: number;
+
+  @ApiProperty()
+  @Expose()
+  isPurchased: boolean;
+
+  @ApiProperty({ type: AuthorRefDto })
+  @Expose()
+  @Type(() => AuthorRefDto)
+  author: AuthorRefDto;
+
+  @ApiProperty({ type: RefDto })
+  @Expose()
+  @Type(() => RefDto)
+  category: RefDto;
+
+  @ApiProperty({ type: RefDto })
+  @Expose()
+  @Type(() => RefDto)
+  difficulty: RefDto;
+
+  @ApiProperty({ type: RefDto })
+  @Expose()
+  @Type(() => RefDto)
+  language: RefDto;
+}

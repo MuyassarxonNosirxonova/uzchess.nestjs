@@ -2,9 +2,9 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { GetAllNewsQuery } from './get-all-news.query';
 import { FindOptionsWhere, ILike } from 'typeorm';
 import { plainToInstance } from 'class-transformer';
-import { News } from '../entities/news.entity';
+import { News } from '../../entities/news.entity';
 import { GetAllNewsResponse } from './get-all-news.response';
-import { PaginatedResult } from '../../common/dtos/paginated-result.dto';
+import { PaginatedResult } from '../../../common/dtos/paginated-result.dto';
 
 
 @QueryHandler(GetAllNewsQuery)

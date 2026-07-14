@@ -10,6 +10,9 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './core/guards/auth.guard';
 import { PermissionGuard } from './core/guards/permission.guard';
 import { CacheModule } from '@nestjs/cache-manager';
+import { NewsModule } from './features/news/news.module';
+import { RoleGuard } from './core/guards/role.guard';
+import { CoursesModule } from './features/courses/courses.module';
 
 @Module({
   imports: [
@@ -28,9 +31,12 @@ import { CacheModule } from '@nestjs/cache-manager';
     AuthModule,
     LibraryModule,
     CommonModule,
+    NewsModule,
+    CoursesModule
   ],
   providers: [
     {provide: APP_GUARD, useClass: AuthGuard},
+    {provide: APP_GUARD, useClass: RoleGuard},
     {provide: APP_GUARD, useClass: PermissionGuard}
 
   ]

@@ -1,28 +1,26 @@
-import { BaseModel } from '../../../../core/base.model';
-import { Allow, IsString, MaxLength } from 'class-validator';
+import { Allow, IsDateString, IsString, MaxLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { CreateNewsCommand } from './create-news.command';
 
-export class CreateNewsRequest extends BaseModel {
+export class CreateNewsRequest {
   @IsString()
   @MaxLength(256)
   @ApiProperty()
   title: string;
 
-  @IsString()
-  @MaxLength(128)
-  @ApiProperty()
+  @Allow()
+  @ApiProperty({ type: 'string', format: 'binary' })
   image: string;
 
   @IsString()
   @ApiProperty()
   content: string;
 
+  @IsDateString()
   @ApiProperty()
   date: Date;
 
   @Allow()
-  toCommand() {
-    return new CreateNewsCommand(this.title,this.image,this.content,this.date)
-  }
+  toCommand = (image: Express.Multer.File) =>
+    new CreateNewsCommand(this.title, image.filename, this.content, this.date);
 }

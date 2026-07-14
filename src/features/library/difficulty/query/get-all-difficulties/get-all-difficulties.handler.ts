@@ -10,5 +10,6 @@ export class GetAllDifficultiesHandler implements IQueryHandler<GetAllDifficulti
       difficulty.icon = 'http://localhost:8000/'+ difficulty.icon
     }
     return difficulties;
+
   }
 }

@@ -9,7 +9,7 @@ export class CreateDifficultyRequest {
   title: string;
 
   @Allow()
-  @ApiProperty()
+  @ApiProperty({type:"string", format:'binary'})
   icon: string;
 
   @Allow()

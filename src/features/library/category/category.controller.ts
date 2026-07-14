@@ -11,7 +11,6 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { Category } from '../entities/category.entity';
 import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
 import { CreateCategoryRequest } from './commands/create-category/create-category.request';
 import { UpdateCategoryRequest } from './commands/update-category/update-category.request';
@@ -22,6 +21,7 @@ import { PaginatedResultDto } from '../../common/dtos/paginated-result.dto';
 import { AuthGuard } from '../../../core/guards/auth.guard';
 import { Roles } from '../../../core/decorators/roles.decorator';
 import { Role } from '../../../core/enums/role.enum';
+import { DeleteCategoryCommand } from './commands/delete-category/delete-category.command';
 
 @Controller('category')
 @ApiBearerAuth()
@@ -54,11 +54,8 @@ export class CategoryController {
   }
 
   @Delete('delete/:id')
+  @Roles()
   async remove(@Param('id', ParseIntPipe) id: number) {
-    const category = await Category.findOne({ where: { id } });
-    if (!category) throw new NotFoundException(`Category #${id} not found`);
-
-    await Category.remove(category);
-    return { message: `Category #${id} deleted` };
+    return await this.cmdBus.execute(new DeleteCategoryCommand(id));
   }
 }
