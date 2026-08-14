@@ -4,9 +4,9 @@ import type { Request } from 'express';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { CreateCourseReviewRequest } from './commands/create-course-review/create-course-review.request';
 import { GetCourseReviewsRequest } from './queries/get-course-reviews/get-course-reviews.request';
-import { AuthGuard } from '../../../core/guards/auth.guard';
-import { Roles } from '../../../core/decorators/roles.decorator';
-import { Role } from '../../../core/enums/role.enum';
+import { AuthGuard } from '@core/guards/auth.guard';
+import { Roles } from '@core/decorators/roles.decorator';
+import {UserType} from '@/enums/user-type.enum';
 
 @Controller('courses/:courseId/reviews')
 @ApiBearerAuth()
@@ -26,7 +26,7 @@ export class CourseReviewController {
 
   @Post()
   @UseGuards(AuthGuard)
-  @Roles(Role.User, Role.Admin)
+  @Roles(UserType.User, UserType.Admin)
   async create(
     @Param('courseId', ParseIntPipe) courseId: number,
     @Body() payload: CreateCourseReviewRequest,

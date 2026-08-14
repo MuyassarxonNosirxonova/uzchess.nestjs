@@ -1,19 +1,19 @@
-import { Column, Entity, OneToMany } from 'typeorm';
-import { BaseModel } from '../../../core/base.model';
-import { UserRole } from './user-role.entity';
-import { RolePermission } from './role.permission.entity';
+import {BaseModel} from "@core/base.model";
+import {Column, Entity, OneToMany} from 'typeorm';
+import {UserRole} from './user-role.entity';
+import { RolePermission } from '@/features/auth/entities/role.permission.entity';
 
 @Entity('roles')
 export class Role extends BaseModel {
-  @Column({ length: 64, unique:true })
+  @Column({length: 64, unique: true})
   title: string;
 
-  @Column({ type:'text', nullable:true })
+  @Column({type: 'text', nullable: true})
   description?: string;
 
-  @OneToMany(()=> RolePermission, (rp) => rp.role)
-  rolePermissions:RolePermission[];
+  @OneToMany(() => RolePermission, (rp) => rp.role)
+  rolePermissions: RolePermission[];
 
-  @OneToMany(()=> UserRole, (ur) => ur.role)
-  userRoles:UserRole[];
+  @OneToMany(() => UserRole, (ur) => ur.role)
+  userRoles: UserRole[];
 }

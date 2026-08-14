@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  NotFoundException,
   Param,
   ParseIntPipe,
   Patch,
@@ -18,34 +17,35 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { GetAllCategoriesRequest } from './queries/get-all-categories/get-all-categories.request';
 import { GetAllCategoriesResponse } from './queries/get-all-categories/get-all-categories.response';
 import { PaginatedResultDto } from '../../common/dtos/paginated-result.dto';
-import { AuthGuard } from '../../../core/guards/auth.guard';
-import { Roles } from '../../../core/decorators/roles.decorator';
-import { Role } from '../../../core/enums/role.enum';
+import { AuthGuard } from '@core/guards/auth.guard';
+import { RoleGuard } from '@core/guards/role.guard';
+import { Roles } from '@core/decorators/roles.decorator';
 import { DeleteCategoryCommand } from './commands/delete-category/delete-category.command';
+import { UserType } from '@/enums/user-type.enum';
 
 @Controller('category')
 @ApiBearerAuth()
-@UseGuards(AuthGuard)
-@Roles(Role.Admin)
+@UseGuards(AuthGuard, RoleGuard)
 export class CategoryController {
   constructor(
     private cmdBus: CommandBus,
     private queryBus: QueryBus,
   ) {}
+
   @Get('list')
-  @Roles(Role.Admin)
   @ApiOkResponse({ type: PaginatedResultDto(GetAllCategoriesResponse) })
   async getAll(@Query() filters: GetAllCategoriesRequest) {
     return await this.queryBus.execute(filters.toQuery());
   }
 
   @Post('create')
-  @Roles(Role.Admin, Role.User)
+  @Roles(UserType.Admin)
   async create(@Body() payload: CreateCategoryRequest) {
     return await this.cmdBus.execute(payload.toCommand());
   }
 
   @Patch('update/:id')
+  @Roles(UserType.Admin)
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() payload: UpdateCategoryRequest,
@@ -54,7 +54,7 @@ export class CategoryController {
   }
 
   @Delete('delete/:id')
-  @Roles()
+  @Roles(UserType.Admin)
   async remove(@Param('id', ParseIntPipe) id: number) {
     return await this.cmdBus.execute(new DeleteCategoryCommand(id));
   }

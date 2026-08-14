@@ -1,7 +1,7 @@
+import {BaseModel} from "@core/base.model";
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { User } from './user.entity';
 import { Role } from './role.entity';
-import { BaseModel } from '../../../core/base.model';
 
 @Entity('userRoles')
 export class UserRole extends BaseModel {

@@ -1,24 +1,25 @@
-import { Allow, IsString, MaxLength } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
-import { RegisterCommand } from './register.command';
+import {Allow, IsEnum, IsString, MaxLength} from "class-validator";
+import {ApiProperty} from "@nestjs/swagger";
+import {RegisterCommand} from "./register.command";
+import {LoginType} from "@/features/auth/entities/user.entity";
+
 
 export class RegisterRequest {
   @IsString()
-  @MaxLength(64)
+  @MaxLength(96)
   @ApiProperty()
   username: string;
-
-
-  @IsString()
-  @MaxLength(32)
-  @ApiProperty()
-  password: string;
 
   @IsString()
   @MaxLength(64)
   @ApiProperty()
   fullName: string;
 
+  @IsEnum(LoginType)
+  @ApiProperty()
+  loginType: LoginType;
+
   @Allow()
   toCommand = () => new RegisterCommand(this);
+
 }

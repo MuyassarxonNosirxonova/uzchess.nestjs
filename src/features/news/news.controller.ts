@@ -20,17 +20,17 @@ import { ApiBearerAuth, ApiConsumes, ApiOkResponse } from '@nestjs/swagger';
 import { CreateNewsRequest } from './commands/create-news/create-news.request';
 import { UpdateNewsRequest } from './commands/update-news/update-news.request';
 import { DeleteNewsCommand } from './commands/delete-news/delete-news.command';
-import {NewsViewCommand} from './news.view/news.view-commands/news-view.command';
+import { NewsViewCommand } from './news.view/news.view-commands/news-view.command';
 import { PaginatedResultDto } from '../common/dtos/paginated-result.dto';
-import { AuthGuard } from '../../core/guards/auth.guard';
-import { Roles } from '../../core/decorators/roles.decorator';
-import { Role } from '../../core/enums/role.enum';
+import { AuthGuard } from '@core/guards/auth.guard';
+import { Roles } from '@core/decorators/roles.decorator';
 import { GetAllNewsResponse } from './queries/get-all-news/get-all-news.response';
 import { GetAllNewsRequest } from './queries/get-all-news/get-all-news.request';
 import { GetOneNewsResponse } from './queries/get-one-news/get-one-news.response';
 import { GetOneNewsQuery } from './queries/get-one-news/get-one-news.query';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { multerStorageOptions } from '../../core/configs/multer.config';
+import { multerStorageOptions } from '@core/configs/multer.config';
+import { UserType } from '@/enums/user-type.enum';
 
 @Controller('news')
 @ApiBearerAuth()
@@ -48,7 +48,7 @@ export class NewsController {
 
   @Get(':id')
   @UseGuards(AuthGuard)
-  @Roles(Role.User, Role.Admin)
+  @Roles(UserType.User, UserType.Admin)
   @ApiOkResponse({ type: GetOneNewsResponse })
   async findOne(@Param('id', ParseIntPipe) id: number, @Req() req: Request) {
     const news = await this.queryBus.execute(new GetOneNewsQuery(id));
@@ -62,13 +62,13 @@ export class NewsController {
 
   @Post('create')
   @UseGuards(AuthGuard)
-  @Roles(Role.Admin)
+  @Roles( UserType.Admin)
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(
     FileInterceptor('image', {
       storage: multerStorageOptions({
         destination: 'image',
-        extensions: ['jpg'],
+        extensions: ['png'],
       }),
     }),
   )
@@ -81,7 +81,7 @@ export class NewsController {
 
   @Patch('update/:id')
   @UseGuards(AuthGuard)
-  @Roles(Role.Admin)
+  @Roles(UserType.Admin)
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('image', { storage: multerStorageOptions }))
   async update(
@@ -94,7 +94,7 @@ export class NewsController {
 
   @Delete('delete/:id')
   @UseGuards(AuthGuard)
-  @Roles(Role.Admin)
+  @Roles(UserType.Admin)
   async remove(@Param('id', ParseIntPipe) id: number) {
     return await this.cmdBus.execute(new DeleteNewsCommand(id));
   }

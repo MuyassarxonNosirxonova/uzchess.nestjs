@@ -14,10 +14,9 @@ import type { Request } from 'express';
 import { CreateBookReviewRequest } from './commands/create-book-review/create-book-review.request';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { GetBookReviewsRequest } from './queries/get-book-reviews/get-book-review.request';
-import { AuthGuard } from '../../../core/guards/auth.guard';
-import { Roles } from '../../../core/decorators/roles.decorator';
-import { Role } from '../../../core/enums/role.enum';
-
+import { AuthGuard } from '@core/guards/auth.guard';
+import { Roles } from '@core/decorators/roles.decorator';
+import { UserType } from '@/enums/user-type.enum';
 
 @Controller('books/:bookId/reviews')
 @ApiBearerAuth()
@@ -37,7 +36,7 @@ export class BookReviewController {
 
   @Post()
   @UseGuards(AuthGuard)
-  @Roles(Role.User, Role.Admin)
+  @Roles(UserType.User, UserType.Admin)
   async create(
     @Param('bookId', ParseIntPipe) bookId: number,
     @Body() payload: CreateBookReviewRequest,

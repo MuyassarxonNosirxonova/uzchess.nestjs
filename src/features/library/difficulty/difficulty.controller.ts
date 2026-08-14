@@ -15,7 +15,7 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { GetAllDifficultiesRequest } from './query/get-all-difficulties/get-all-difficulties.request';
 import { ApiConsumes } from '@nestjs/swagger';
 import { CreateDifficultyRequest } from './commands/create-difficulty/create-difficulty.request';
-import { multerStorageOptions } from '../../../core/configs/multer.config';
+import { multerStorageOptions } from '@core/configs/multer.config';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UpdateDifficultyRequest } from './commands/update-difficulty/update-difficulty.request';
 import { DeleteDifficultyCommand } from './commands/delete-difficulty/delete-difficulty.command';

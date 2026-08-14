@@ -1,11 +1,19 @@
-import { Body, Controller, Param, ParseIntPipe, Patch, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import type { Request } from 'express';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { UpdateLessonProgressRequest} from './commands/update-lesson/update-lesson-progress.request';
-import { AuthGuard } from '../../../core/guards/auth.guard';
-import { Roles } from '../../../core/decorators/roles.decorator';
-import { Role } from '../../../core/enums/role.enum';
+import { UpdateLessonProgressRequest } from './commands/update-lesson/update-lesson-progress.request';
+import { AuthGuard } from '@core/guards/auth.guard';
+import { Roles } from '@core/decorators/roles.decorator';
+import { UserType } from '@/enums/user-type.enum';
 
 @Controller('course-lessons/:id/progress')
 @ApiBearerAuth()
@@ -14,7 +22,7 @@ export class UserLessonController {
   constructor(private cmdBus: CommandBus) {}
 
   @Patch()
-  @Roles(Role.User, Role.Admin)
+  @Roles(UserType.User, UserType.Admin)
   async updateProgress(
     @Param('id', ParseIntPipe) courseLessonId: number,
     @Body() payload: UpdateLessonProgressRequest,
